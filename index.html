@@ -322,20 +322,8 @@
     </style>
 </head>
 <body>
-    <!-- 
-    ====================================
-    MUSIC SETUP INSTRUCTIONS:
-    ====================================
-    1. Add your 3 MP3 files to the SAME FOLDER as this HTML file
-    2. Name them: song1.mp3, song2.mp3, song3.mp3
-       (or edit the playlist array below with your file names)
-    3. That's it! The music will play automatically when she clicks the first button
     
-    If you want different file names, edit the "playlist" array in the JavaScript below (line 360)
-    ====================================
-    -->
-
-    <!-- Music control panel -->
+    <!-- Panel de control de música -->
     <div id="musicControlPanel" class="music-control-panel">
         <button id="musicToggle" class="music-toggle" onclick="toggleMusic()">🔊</button>
         <div class="song-info" id="songInfo">♫ Canción 1</div>
@@ -343,20 +331,20 @@
     </div>
 
     <div class="container">
-        <!-- Initial Screen -->
+        <!-- Pantalla de inicio -->
         <div id="initialScreen" class="initial-message">
             <h1>Hola mi amor, si te sientes mal o cansada pícale aquí</h1>
             <button class="heart-button" onclick="showPopup()">❤️ Clic Aquí ❤️</button>
         </div>
 
-        <!-- Popup Screen -->
+        <!-- Pantalla pop up -->
         <div id="popupScreen" class="popup">
             <div class="heart-decoration">💖</div>
             <p class="popup-text">Espera hermosa, te hice algo. Si te sientes mal o un día no estoy, espero pueda ayudar</p>
             <button class="continue-button" onclick="showAdmiration()">Continuar →</button>
         </div>
 
-        <!-- Admiration Screen -->
+        <!-- Lista para Nao -->
         <div id="admirationScreen" class="admiration-section">
             <h2 class="admiration-title">Cosas que admiro y amo de ti</h2>
             <ul class="admiration-list">
@@ -395,9 +383,7 @@
             { file: 'song2.mp3', name: 'La Tay' },
             { file: 'song3.mp3', name: 'Sparks' }
         ];
-        // Change the file names above to match your MP3 files
-        // Example: { file: 'perfect.mp3', name: 'Perfect - Ed Sheeran' }
-        // ====================================
+        
 
         let currentSongIndex = 0;
         let isPlaying = false;
@@ -408,20 +394,20 @@
         const songInfo = document.getElementById('songInfo');
 
         function loadSong(index) {
-            // Stop current song if playing
+            // Detiene la canción actual si se esta reproduciendo
             if (currentAudio) {
                 currentAudio.pause();
                 currentAudio = null;
             }
 
-            // Create new audio element
+            // Crea nuevo elemento de audio
             currentAudio = new Audio(playlist[index].file);
             currentAudio.volume = 0.3; // volumen moderado (30%)
             
-            // Update song info display
+            // Actualiza la info de la canción 
             songInfo.textContent = `♫ ${playlist[index].name}`;
 
-            // When song ends, play next song
+            // Cuando la canción acabe, reproduce la siguiente
             currentAudio.addEventListener('ended', () => {
                 nextSong();
             });
@@ -430,27 +416,27 @@
         }
 
         function showPopup() {
-            // Hide initial screen
+            // Esconde la página inicial
             document.getElementById('initialScreen').classList.add('hidden');
             
-            // Show popup
+            // Arroja el pop up
             document.getElementById('popupScreen').classList.add('active');
             
-            // Start music when first button is clicked
+            // Inicia la canción al interactuar con el boton
             startPlaylist();
         }
 
         function showAdmiration() {
-            // Hide popup
+            // Esconce el pop up
             document.getElementById('popupScreen').classList.remove('active');
             document.getElementById('popupScreen').classList.add('hidden');
             
-            // Show admiration section
+            // Arroja la lista
             document.getElementById('admirationScreen').classList.add('active');
         }
 
         function startPlaylist() {
-            // Load and play first song
+            // Carga y reproduce la canción
             loadSong(0);
             
             currentAudio.play().then(() => {
@@ -485,10 +471,10 @@
         }
 
         function nextSong() {
-            // Move to next song (loop back to start if at end)
+            // Pasa a la siguiente canción, si es la útima de la lista se reinicia
             currentSongIndex = (currentSongIndex + 1) % playlist.length;
             
-            // Load and play new song
+            // Carga y reproduce la nueva canción
             loadSong(currentSongIndex);
             
             if (isPlaying) {
@@ -502,7 +488,7 @@
             }
         }
 
-        // Optional: Add keyboard controls
+        // Por si se agregan controles del kwyboard (por ahora no)
         document.addEventListener('keydown', (e) => {
             if (e.code === 'Space' && musicControlPanel.classList.contains('visible')) {
                 e.preventDefault();

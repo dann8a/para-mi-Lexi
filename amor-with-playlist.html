@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 50%, #ffd6eb 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .initial-message {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(255, 182, 193, 0.3);
+            animation: fadeIn 1s ease-in;
+        }
+
+        h1 {
+            color: #ff69b4;
+            font-size: clamp(1.5rem, 5vw, 2.2rem);
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .heart-button {
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 20, 147, 0.3);
+            font-weight: 600;
+        }
+
+        .heart-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 20, 147, 0.4);
+        }
+
+        .heart-button:active {
+            transform: translateY(-1px);
+        }
+
+        .popup {
+            display: none;
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(255, 182, 193, 0.3);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .popup.active {
+            display: block;
+        }
+
+        .popup-text {
+            color: #ff1493;
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .continue-button {
+            background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 182, 193, 0.3);
+            font-weight: 600;
+        }
+
+        .continue-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 182, 193, 0.4);
+        }
+
+        .admiration-section {
+            display: none;
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(255, 182, 193, 0.3);
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .admiration-section.active {
+            display: block;
+        }
+
+        .admiration-title {
+            color: #ff69b4;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            margin-bottom: 30px;
+        }
+
+        .admiration-list {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 35px;
+        }
+
+        .admiration-list li {
+            color: #666;
+            font-size: 1.1rem;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff0f5, #ffe4e9);
+            border-radius: 15px;
+            border-left: 4px solid #ff69b4;
+            animation: slideIn 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .admiration-list li:nth-child(1) { animation-delay: 0.1s; }
+        .admiration-list li:nth-child(2) { animation-delay: 0.2s; }
+        .admiration-list li:nth-child(3) { animation-delay: 0.3s; }
+        .admiration-list li:nth-child(4) { animation-delay: 0.4s; }
+        .admiration-list li:nth-child(5) { animation-delay: 0.5s; }
+        .admiration-list li:nth-child(6) { animation-delay: 0.6s; }
+        .admiration-list li:nth-child(7) { animation-delay: 0.7s; }
+
+        .admiration-list li::before {
+            content: "💕 ";
+            margin-right: 10px;
+        }
+
+        .final-message {
+            color: #ff1493;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            padding: 25px;
+            background: linear-gradient(135deg, #fff5f8, #ffe9f2);
+            border-radius: 15px;
+            font-weight: 500;
+            border: 2px solid #ffb6c1;
+        }
+
+        .heart-decoration {
+            font-size: 3rem;
+            margin: 20px 0;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        /* Music control panel */
+        .music-control-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            box-shadow: 0 5px 20px rgba(255, 20, 147, 0.3);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        .music-control-panel.visible {
+            display: flex;
+        }
+
+        .music-toggle {
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .music-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .song-info {
+            color: #ff1493;
+            font-size: 0.85rem;
+            font-weight: 500;
+            max-width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .skip-button {
+            background: transparent;
+            border: none;
+            color: #ff69b4;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .skip-button:hover {
+            color: #ff1493;
+            transform: scale(1.2);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+            .initial-message, .popup, .admiration-section {
+                padding: 30px 20px;
+            }
+
+            .admiration-list li {
+                font-size: 1rem;
+                padding: 12px 15px;
+            }
+
+            .final-message {
+                font-size: 1.1rem;
+                padding: 20px;
+            }
+
+            .music-control-panel {
+                bottom: 15px;
+                right: 15px;
+                padding: 10px 15px;
+            }
+
+            .music-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+
+            .song-info {
+                max-width: 100px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+    ====================================
+    MUSIC SETUP INSTRUCTIONS:
+    ====================================
+    1. Add your 3 MP3 files to the SAME FOLDER as this HTML file
+    2. Name them: song1.mp3, song2.mp3, song3.mp3
+       (or edit the playlist array below with your file names)
+    3. That's it! The music will play automatically when she clicks the first button
+    
+    If you want different file names, edit the "playlist" array in the JavaScript below (line 360)
+    ====================================
+    -->
+
+    <!-- Music control panel -->
+    <div id="musicControlPanel" class="music-control-panel">
+        <button id="musicToggle" class="music-toggle" onclick="toggleMusic()">🔊</button>
+        <div class="song-info" id="songInfo">♫ Canción 1</div>
+        <button class="skip-button" onclick="nextSong()" title="Siguiente canción">⏭</button>
+    </div>
+
+    <div class="container">
+        <!-- Initial Screen -->
+        <div id="initialScreen" class="initial-message">
+            <h1>Hola mi amor, si te sientes mal o cansada pícale aquí</h1>
+            <button class="heart-button" onclick="showPopup()">❤️ Clic Aquí ❤️</button>
+        </div>
+
+        <!-- Popup Screen -->
+        <div id="popupScreen" class="popup">
+            <div class="heart-decoration">💖</div>
+            <p class="popup-text">Espera hermosa, te hice algo. Si te sientes mal o un día no estoy, espero pueda ayudar</p>
+            <button class="continue-button" onclick="showAdmiration()">Continuar →</button>
+        </div>
+
+        <!-- Admiration Screen -->
+        <div id="admirationScreen" class="admiration-section">
+            <h2 class="admiration-title">Cosas que admiro y amo de ti</h2>
+            <ul class="admiration-list">
+                <li>Tu sonrisa que siempre ilumina mi vida, incluso cuando los días son oscuros</li>
+                <li>Tu fuerza para enfrentar cualquier desafío por más grande que parezca</li>
+                <li>Tu corazón lleno de amor cálido</li>
+                <li>Tu capacidad de hacer que todo sea mejor</li>
+                <li>Tu belleza interior y exterior que me deja sin palabras todos los días</li>
+                <li>Tu perseverancia cuando las cosas se ponen difíciles</li>
+                <li>Tu paciencia tan grande conmigo aún cuando se que he terminado con ella muchas veces</li>
+                <li>Amo con todo mi ser tus ojos y como se enchinan cuando te ries</li>
+                <li>Amo la forma en la que platicas y explicas lo que te emociona y apasiona</li>
+                <li>Tu inteligencia y capacidad para aprender cosas tan complejas</li>
+                <li>Tu risa y alegria que transmites cuando haces lo que te gusta</li>
+                <li>Tu alma tan cálida y pura</li>
+                <li>Tu manera de abrazar que me hace sentir en casa, gracias por hacer que me gusten los abrazos</li>
+                <li>Tu voz que me calma incluso cuando todo está hecho un caos</li>
+                <li>Tu olor que siempre me calma y me hace sonreír</li>
+                <li>El como llegas a morder un poco tu labio cuando te concentras</li>
+                <li>Cada paso que das, por pequeño que parezca, vale mucho</li>
+                <li>Tu esfuerzo jamas pasará desapercibido</li>
+                <li>Yo confío en ti, incluso cuando tú dudas</li>
+                <li>Tu esfuerzo constante es admirable, nunca lo olvides</li>
+            </ul>
+            <div class="final-message">
+                Te amaré para siempre, con todo lo que tengo, en cada temporada de tu vida, por encima del miedo, a través de cada tormenta, sin importar la distancia. Y si por alguna razón yo no estuviera cerca, aún así te amaré y cuidaré de ti desde donde esté. Te prometo amarte con intención, paciencia y todo mi corazón. No importa dónde esté, siempre serás mi preciosa Nao, la misma en quien me enamoré a los 17 y en quien pienso cada noche y sé que pensaré en ti hasta el último día que esté aquí. Te adoro, que jamás se te olvide. Te admiro, sé que llegarás lejos y cada paso que das me hace sentir orgulloso. Solo sigue empujando, amor lo haces increíble.
+        </div>
+    </div>
+
+    <script>
+        // ====================================
+        // Editar archivos de canciones
+        // ====================================
+        const playlist = [
+            { file: 'song1.mp3', name: 'TQMQA' },
+            { file: 'song2.mp3', name: 'La Tay' },
+            { file: 'song3.mp3', name: 'Sparks' }
+        ];
+        // Change the file names above to match your MP3 files
+        // Example: { file: 'perfect.mp3', name: 'Perfect - Ed Sheeran' }
+        // ====================================
+
+        let currentSongIndex = 0;
+        let isPlaying = false;
+        let currentAudio = null;
+
+        const musicToggle = document.getElementById('musicToggle');
+        const musicControlPanel = document.getElementById('musicControlPanel');
+        const songInfo = document.getElementById('songInfo');
+
+        function loadSong(index) {
+            // Stop current song if playing
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+
+            // Create new audio element
+            currentAudio = new Audio(playlist[index].file);
+            currentAudio.volume = 0.3; // volumen moderado (30%)
+            
+            // Update song info display
+            songInfo.textContent = `♫ ${playlist[index].name}`;
+
+            // When song ends, play next song
+            currentAudio.addEventListener('ended', () => {
+                nextSong();
+            });
+
+            return currentAudio;
+        }
+
+        function showPopup() {
+            // Hide initial screen
+            document.getElementById('initialScreen').classList.add('hidden');
+            
+            // Show popup
+            document.getElementById('popupScreen').classList.add('active');
+            
+            // Start music when first button is clicked
+            startPlaylist();
+        }
+
+        function showAdmiration() {
+            // Hide popup
+            document.getElementById('popupScreen').classList.remove('active');
+            document.getElementById('popupScreen').classList.add('hidden');
+            
+            // Show admiration section
+            document.getElementById('admirationScreen').classList.add('active');
+        }
+
+        function startPlaylist() {
+            // Load and play first song
+            loadSong(0);
+            
+            currentAudio.play().then(() => {
+                isPlaying = true;
+                musicToggle.textContent = '🔊';
+                musicControlPanel.classList.add('visible');
+            }).catch((error) => {
+                console.log('Music autoplay prevented:', error);
+                // If autoplay is blocked, show control panel anyway
+                musicControlPanel.classList.add('visible');
+                musicToggle.textContent = '🔇';
+            });
+        }
+
+        function toggleMusic() {
+            if (!currentAudio) {
+                loadSong(currentSongIndex);
+            }
+
+            if (isPlaying) {
+                currentAudio.pause();
+                musicToggle.textContent = '🔇';
+                isPlaying = false;
+            } else {
+                currentAudio.play().then(() => {
+                    musicToggle.textContent = '🔊';
+                    isPlaying = true;
+                }).catch((error) => {
+                    console.log('Play error:', error);
+                });
+            }
+        }
+
+        function nextSong() {
+            // Move to next song (loop back to start if at end)
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            
+            // Load and play new song
+            loadSong(currentSongIndex);
+            
+            if (isPlaying) {
+                currentAudio.play().then(() => {
+                    musicToggle.textContent = '🔊';
+                }).catch((error) => {
+                    console.log('Play error:', error);
+                    isPlaying = false;
+                    musicToggle.textContent = '🔇';
+                });
+            }
+        }
+
+        // Optional: Add keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && musicControlPanel.classList.contains('visible')) {
+                e.preventDefault();
+                toggleMusic();
+            }
+        });
+    </script>
+</body>
+</html>
